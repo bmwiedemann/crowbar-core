@@ -41,7 +41,7 @@ ruby_block "Find the fallback boot device" do
           # Prefer devices in a specific order
           next if deviceignore && path.include?(deviceignore)
           disk_by_path = "disk/by-path/#{path}"
-          break if dev =~ /^[hsv]d[a-z]+$/
+          break if dev =~ /^[hsv]da$/
           # pci-0000:0b:08.0-cciss-disk0 -> ../../cciss/c0d0
           break if dev =~ /^c[0-9]+d[0-9]+$/
           # xen-vbd-51712-part1 -> ../../xvda1
