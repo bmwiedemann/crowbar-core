@@ -201,7 +201,8 @@ nuke_everything() {
         # write new unique MBR signature
         # This initializes a random 32bit Disk signature used to
         # distinguish disks, which helps installing boot loader properly
-        echo w | fdisk /dev/$name
+        # create+delete a partition for workarounding bsc#985422
+        echo -e 'n\n\n\n\n\nd\nw' | fdisk /dev/$name
     done < <(tac /proc/partitions)
 }
 
