@@ -45,8 +45,7 @@ unless node[:platform_family] == "windows"
     owner "root"
     group "root"
     mode 0644
-    # do a dup, because we'll insert 127.0.0.1 later on
-    variables(nameservers: dns_list.dup)
+    variables(nameservers: dns_list)
   end
 
   file "/etc/resolv-forwarders.conf" do
@@ -64,7 +63,8 @@ unless node[:platform_family] == "windows"
     not_if { node["crowbar"]["admin_node"] && ::File.exist?("/var/lib/crowbar/install/disable_dns") }
   end
 
-  dns_list = dns_list.insert(0, "127.0.0.1").take(3)
+  # do a dup because we modify the content
+  dns_list_with_local = dns_list.dup.insert(0, "127.0.0.1").take(3)
 
   template "/etc/resolv.conf" do
     source "resolv.conf.erb"
@@ -72,7 +72,7 @@ unless node[:platform_family] == "windows"
     group "root"
     mode 0644
     variables(
-      nameservers: dns_list,
+      nameservers: dns_list_with_local,
       search_domains: search_domains
     )
   end
