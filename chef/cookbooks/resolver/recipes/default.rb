@@ -31,6 +31,10 @@ end
 
 dns_list << node[:dns][:nameservers]
 dns_list.flatten!
+if dns_list.empty?
+  # better fail than leave the node with a broken DNS config
+  raise "List of DNS servers is empty"
+end
 
 # do a dup as we'll modify the content
 search_domains = (node[:dns][:additional_search_domains] || []).dup
