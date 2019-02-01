@@ -350,6 +350,8 @@ filename = \"discovery/x86_64/bios/pxelinux.0\";
       append << "ifcfg=dhcp4 netwait=60"
       append << "squash=0" # workaround bsc#962397
       append << "autoupgrade=1" if mnode[:state] == "os-upgrading"
+      # support VNC install to not rely on hard-to-use BMC java consoles
+      append << "vnc=1 vncpassword=easy1234"
 
       target_platform_distro = os.gsub(/-.*$/, "")
       target_platform_version = os.gsub(/^.*-/, "")
